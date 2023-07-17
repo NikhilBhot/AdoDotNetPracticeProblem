@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace ADODOTNetPracticeProblem
 {
@@ -42,6 +43,45 @@ namespace ADODOTNetPracticeProblem
                         else
                         {
                             Console.WriteLine("Failed to add customer details.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+            //Get all customers details using ADO.Net framework.
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Create the SQL query
+                    string query = "SELECT * FROM Customers";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Create a data adapter to retrieve the data
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                        // Create a dataset to store the retrieved data
+                        DataSet dataSet = new DataSet();
+
+                        // Fill the dataset with the data from the adapter
+                        adapter.Fill(dataSet, "Customers");
+
+                        // Get the DataTable containing the customer data
+                        DataTable customersTable = dataSet.Tables["Customers"];
+
+                        // Iterate over the rows and display the customer details
+                        foreach (DataRow row in customersTable.Rows)
+                        {
+                            Console.WriteLine("Customer ID: {0}", row["CustomerId"]);
+                            Console.WriteLine("Name: {0}", row["Name"]);
+                            Console.WriteLine("Email: {0}", row["Email"]);
+                            Console.WriteLine("----------------------");
                         }
                     }
                 }
