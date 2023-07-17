@@ -90,6 +90,43 @@ namespace ADODOTNetPracticeProblem
                     Console.WriteLine("An error occurred: " + ex.Message);
                 }
             }
+            //Delete any one customer from database using ADO.Net framework.
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Prompt user for customer ID to delete
+                    Console.Write("Enter the Customer ID to delete: ");
+                    int customerId = Convert.ToInt32(Console.ReadLine());
+
+                    // Create the SQL query
+                    string query = "DELETE FROM Customers WHERE CustomerId = @CustomerId";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Add parameter to the query
+                        command.Parameters.AddWithValue("@CustomerId", customerId);
+
+                        // Execute the query
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("Customer deleted successfully!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Customer not found or deletion failed.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
         }
     }
 }
