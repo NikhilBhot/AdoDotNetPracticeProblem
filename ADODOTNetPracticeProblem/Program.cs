@@ -127,6 +127,46 @@ namespace ADODOTNetPracticeProblem
                     Console.WriteLine("An error occurred: " + ex.Message);
                 }
             }
+            //Update customer salary based on customer name using ADO.Net framework.
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Prompt user for customer name and new salary
+                    Console.Write("Enter the customer name: ");
+                    string customerName = Console.ReadLine();
+                    Console.Write("Enter the new salary: ");
+                    decimal newSalary = Convert.ToDecimal(Console.ReadLine());
+
+                    // Create the SQL query
+                    string query = "UPDATE Customers SET Salary = @Salary WHERE Name = @Name";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Add parameters to the query
+                        command.Parameters.AddWithValue("@Name", customerName);
+                        command.Parameters.AddWithValue("@Salary", newSalary);
+
+                        // Execute the query
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            Console.WriteLine("Customer salary updated successfully!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Customer not found or update failed.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
         }
     }
 }
